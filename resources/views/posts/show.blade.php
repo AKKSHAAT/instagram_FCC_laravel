@@ -8,7 +8,11 @@
         </div>
         <div class="col-4">
             <div>
-                <h3>{{ $post->user->username }}</h3>
+                <a  href="/profile/{{ $post->user->id }}" 
+                    style="color: black; text-decoration: none"
+                >
+                    <h3>{{ $post->user->username }}</h3>
+                </a>
                 <p>{{ $post->caption }}</p>
             </div>
         </div>
