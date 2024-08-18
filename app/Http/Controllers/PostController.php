@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 class PostController extends Controller
 {
 
@@ -36,5 +35,9 @@ class PostController extends Controller
         }
          
         return redirect('/profile/'. auth()->user()->id );
+    }
+
+    public function show(\App\Models\Post $post) { //fetching post from db v smart
+        return view('posts.show', compact('post'));  // is same as 'post'=>$post
     }
 }
