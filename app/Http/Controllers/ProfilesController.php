@@ -9,11 +9,13 @@ use Illuminate\Http\Request;
 class ProfilesController extends Controller
 {
     public function index($user)
-    {
+    {   
         $user = User::findOrFail($user);
-        
+        $follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;   //
+        // dd($follows);
         return view('profiles.index',[
             'user'=> $user,
+            'follows' => $follows
         ]);
     }
 
@@ -26,18 +28,19 @@ class ProfilesController extends Controller
         $data = request()->validate([
             'title' => 'required',
             'description' => '',
-            'url' => 'url ',
+            'url' => '',
             'image' => ''
         ]);
         
         
         if(request('image')) {
             $imagePath = request('image')->store('profile', 'public');
+            $imageArr = ['image' => $imagePath];
         }
 
         auth()->user()->profile->update(array_merge(
             $data,
-            ['image' => $imagePath]       
+            $imageArr ?? []
         ));
 
         return redirect('/profile/'. $user->id);

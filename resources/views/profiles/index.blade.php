@@ -5,19 +5,23 @@
         <div class="row">
             <div class="col-3 p-5">
                 <img 
-                src="/storage/{{ $user->profile->image}}"
+                src="{{ $user->profile->profileImage() }}"
                 class="rounded-circle w-100 "
                 >
             </div>
             <div class="col-9 pt-5">
 
-                @can('update', $user->profile);
+                <djv class="d-flex pb-2">
+                    <div class="h3">{{ $user->username }}</div> 
+                    <follow-button user-id="{{ $user->id }}" follows="{{ $follows }}"></follow-button>
+                </djv>
+                @can('update', $user->profile)
                 <div class="d-flex justify-content-between "> 
-                    
-                    <h1>{{ $user->username }}</h1> 
                     <a  class="m-2" href="/p/create">New Post+</a>
                 </div>
-                <a  class="m-2" href="/profile/{{ $user->id }}/edit">Edit profile</a>
+                <a  class="m-2" href="/profile/{{ $user->id }}/edit">
+                    Edit profile
+                </a>
                 @endcan
 
                 <div class="d-flex"> 
