@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ProfilesController extends Controller
 {
@@ -13,10 +13,27 @@ class ProfilesController extends Controller
         $user = User::findOrFail($user);
         $follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;   //
         // dd($follows);
-        return view('profiles.index',[
-            'user'=> $user,
-            'follows' => $follows
-        ]);
+
+
+        $postCount = Cache::remember(
+            'count.posts' . $user->id, 
+            now()->addSeconds(30), 
+            function()use($user) {
+                $user->posts->count();
+            });
+
+
+        $followersCount = $user->profile->followers->count();
+        $followingCount = $user->following->count();
+
+        return view('profiles.index',compact(
+            'user',
+            'follows',
+            'postCount',
+            'followersCount',
+            'followingCount'
+        ));
+            
     }
 
     public function edit(User $user) {

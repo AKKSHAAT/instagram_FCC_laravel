@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
+
+
 class PostController extends Controller
 {
 
@@ -12,7 +15,13 @@ class PostController extends Controller
 
 
     public function index() {
-        return view('posts/create');
+        //fetch following user_id
+        $users = auth()->user()->following()->pluck('profiles.user_id');
+        //fetch thir posts
+        $posts = Post::whereIn('user_id', $users)->with('user')->latest()->paginate(5);
+        //sort by time
+        //return;
+        return view('posts.index', compact('posts'));
     }
 
     public function create() {
