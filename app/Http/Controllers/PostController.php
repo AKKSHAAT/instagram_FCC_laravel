@@ -10,6 +10,11 @@ class PostController extends Controller
         $this->middleware('auth');
     }
 
+
+    public function index() {
+        return view('posts/create');
+    }
+
     public function create() {
         return view('posts/create');
     }
